@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listar Móveis</title>
+</head>
+<body>
+    <h1>Lista de Móveis</h1>
+    <a href="{% url 'index' %}">Voltar</a> | <a href="{% url 'novo' %}">Novo Móvel</a>
+    
+    <table border="1">
+        <tr>
+            <th>Nome</th>
+            <th>Cômodo</th>
+            <th>Preço</th>
+            <th>Data Compra</th>
+            <th>Ações</th>
+        </tr>
+        {% for movel in moveis %}
+        <tr>
+            <td>{{ movel.nome }}</td>
+            <td>{{ movel.comodo }}</td>
+            <td>R$ {{ movel.preco }}</td>
+            <td>{{ movel.data_compra|default:"" }}</td>
+            <td>
+                <a href="{% url 'editar' movel.id %}">Editar</a> |
+                <a href="{% url 'excluir' movel.id %}" onclick="return confirm('Tem certeza?')">Excluir</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">Nenhum móvel cadastrado</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

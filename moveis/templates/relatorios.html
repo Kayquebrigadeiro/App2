@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatórios</title>
+</head>
+<body>
+    <h1>Relatórios</h1>
+    <a href="{% url 'index' %}">Voltar</a>
+    
+    <h2>Total Geral: R$ {{ total_geral }}</h2>
+    
+    <h3>Total por Cômodo:</h3>
+    <table border="1">
+        <tr>
+            <th>Cômodo</th>
+            <th>Total</th>
+        </tr>
+        {% for comodo, total in total_por_comodo.items %}
+        <tr>
+            <td>{{ comodo }}</td>
+            <td>R$ {{ total }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">Nenhum dado disponível</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
