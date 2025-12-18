@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Início - Meus Móveis{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary mb-3">🏠 Meus Móveis</h1>
+            <p class="lead text-muted">Sistema completo para controle e organização dos seus móveis</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="display-6">📋</span>
+                        </div>
+                        <h5 class="card-title">Listar Móveis</h5>
+                        <p class="card-text text-muted">Visualize todos os seus móveis organizados por cômodo</p>
+                        <a href="{% url 'listar' %}" class="btn btn-outline-primary">Ver Lista</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="display-6">📊</span>
+                        </div>
+                        <h5 class="card-title">Relatórios</h5>
+                        <p class="card-text text-muted">Acompanhe gastos e estatísticas dos seus móveis</p>
+                        <a href="{% url 'relatorios' %}" class="btn btn-outline-primary">Ver Resumo</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 text-center border-primary">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="display-6">➕</span>
+                        </div>
+                        <h5 class="card-title">Novo Móvel</h5>
+                        <p class="card-text text-muted">Cadastre um novo móvel no sistema</p>
+                        <a href="{% url 'novo' %}" class="btn btn-primary">Adicionar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 text-center">
+            <p class="text-muted">
+                <small>Organize seus móveis de forma simples e eficiente</small>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static currency %}
+
+{% block title %}Lista de Móveis - Meus Móveis{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">📋 Lista de Móveis</h1>
+    <a href="{% url 'novo' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Adicionar Móvel
+    </a>
+</div>
+
+<!-- Busca simples -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="search" placeholder="Buscar por nome ou cômodo..." value="{{ request.GET.search }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-primary w-100">Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if moveis %}
+    <!-- Visualização Desktop (Tabela) -->
+    <div class="d-none d-md-block">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Cômodo</th>
+                            <th>Preço</th>
+                            <th>Data da Compra</th>
+                            <th width="150">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movel in moveis %}
+                        <tr>
+                            <td class="fw-medium">{{ movel.nome }}</td>
+                            <td>
+                                <span class="badge bg-light text-dark">{{ movel.comodo }}</span>
+                            </td>
+                            <td class="price-highlight">{{ movel.preco|currency }}</td>
+                            <td class="text-muted">
+                                {% if movel.data_compra %}
+                                    {{ movel.data_compra }}
+                                {% else %}
+                                    <em>Não informado</em>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'editar' movel.id %}" class="btn btn-outline-primary" title="Editar">
+                                        ✏️
+                                    </a>
+                                    <a href="{% url 'excluir' movel.id %}" 
+                                       class="btn btn-outline-danger" 
+                                       title="Excluir"
+                                       onclick="return confirm('Tem certeza que deseja excluir o móvel \"{{ movel.nome }}\"?')">
+                                        🗑️
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visualização Mobile (Cards) -->
+    <div class="d-md-none">
+        {% for movel in moveis %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">{{ movel.nome }}</h5>
+                    <span class="badge bg-primary">{{ movel.comodo }}</span>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="price-highlight h5 mb-1">{{ movel.preco|currency }}</div>
+                    <small class="text-muted">
+                        {% if movel.data_compra %}
+                            Comprado em: {{ movel.data_compra }}
+                        {% else %}
+                            Data não informada
+                        {% endif %}
+                    </small>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="{% url 'editar' movel.id %}" class="btn btn-outline-primary btn-sm">
+                        ✏️ Editar
+                    </a>
+                    <a href="{% url 'excluir' movel.id %}" 
+                       class="btn btn-outline-danger btn-sm"
+                       onclick="return confirm('Tem certeza que deseja excluir o móvel \"{{ movel.nome }}\"?')">
+                        🗑️ Excluir
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <span class="display-1">📦</span>
+        </div>
+        <h3 class="text-muted mb-3">Nenhum móvel encontrado</h3>
+        <p class="text-muted mb-4">
+            {% if request.GET.search %}
+                Não encontramos móveis com o termo "{{ request.GET.search }}".
+            {% else %}
+                Comece adicionando seu primeiro móvel ao sistema.
+            {% endif %}
+        </p>
+        <a href="{% url 'novo' %}" class="btn btn-primary">
+            Adicionar Primeiro Móvel
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

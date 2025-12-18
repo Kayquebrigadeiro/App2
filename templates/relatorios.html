@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static currency %}
+
+{% block title %}Resumo - Meus Móveis{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="h2 mb-0">📊 Resumo Financeiro</h1>
+    <p class="text-muted">Acompanhe seus gastos com móveis por cômodo</p>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <div class="display-6 mb-2">💰</div>
+                <h3 class="card-title">{{ total_geral|currency }}</h3>
+                <p class="card-text mb-0">Total Investido</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <div class="display-6 mb-2">🏠</div>
+                <h3 class="card-title">{{ total_por_comodo|length }}</h3>
+                <p class="card-text mb-0">Cômodos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <div class="display-6 mb-2">🪑</div>
+                <h3 class="card-title">{{ moveis.count }}</h3>
+                <p class="card-text mb-0">Móveis Cadastrados</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if total_por_comodo %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">💸 Gastos por Cômodo</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            {% for comodo, total in total_por_comodo.items %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-2">
+                            {% if comodo == 'Sala' %}🛋️
+                            {% elif comodo == 'Quarto' %}🛏️
+                            {% elif comodo == 'Cozinha' %}🍳
+                            {% elif comodo == 'Banheiro' %}🚿
+                            {% elif comodo == 'Escritório' %}💻
+                            {% else %}🏠
+                            {% endif %}
+                        </div>
+                        <h5 class="card-title">{{ comodo }}</h5>
+                        <div class="price-highlight h4">{{ total|currency }}</div>
+                        <div class="progress mt-2" style="height: 6px;">
+                            <div class="progress-bar bg-primary" 
+                                 style="width: {% widthratio total total_geral 100 %}%"></div>
+                        </div>
+                        <small class="text-muted">
+                            {% widthratio total total_geral 100 %}% do total
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Tabela detalhada para desktop -->
+<div class="card mt-4 d-none d-md-block">
+    <div class="card-header">
+        <h6 class="mb-0">Detalhamento por Cômodo</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Cômodo</th>
+                    <th>Total Investido</th>
+                    <th>Percentual</th>
+                    <th>Participação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comodo, total in total_por_comodo.items %}
+                <tr>
+                    <td class="fw-medium">{{ comodo }}</td>
+                    <td class="price-highlight">{{ total|currency }}</td>
+                    <td>{% widthratio total total_geral 100 %}%</td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-primary" 
+                                 style="width: {% widthratio total total_geral 100 %}%">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% else %}
+<div class="text-center py-5">
+    <div class="mb-4">
+        <span class="display-1">📊</span>
+    </div>
+    <h3 class="text-muted mb-3">Nenhum dado disponível</h3>
+    <p class="text-muted mb-4">Adicione móveis para visualizar os relatórios</p>
+    <a href="{% url 'novo' %}" class="btn btn-primary">
+        Adicionar Primeiro Móvel
+    </a>
+</div>
+{% endif %}
+
+<div class="mt-4 text-center">
+    <a href="{% url 'listar' %}" class="btn btn-outline-primary">
+        📋 Ver Lista Completa
+    </a>
+</div>
+{% endblock %}
